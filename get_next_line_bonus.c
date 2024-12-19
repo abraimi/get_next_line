@@ -1,19 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abraimi <abraimi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 04:17:21 by abraimi           #+#    #+#             */
-/*   Updated: 2024/12/19 12:05:04 by abraimi          ###   ########.fr       */
+/*   Updated: 2024/12/19 12:25:20 by abraimi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/_types/_size_t.h>
+#include "get_next_line_bonus.h"
 
 int	has_nl(char *s)
 {
@@ -112,7 +109,7 @@ char	*line_push(char *vec)
 
 char	*get_next_line(int fd)
 {
-	static char		*vec;
+	static char		*vec[1024];
 	char			*line;
 	char			*buffer;
 
@@ -120,16 +117,16 @@ char	*get_next_line(int fd)
 		return (NULL);
 	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buffer)
-		return (free(vec), vec = NULL, NULL);
-	vec = read_till_nl(fd, buffer, vec);
-	if (!vec)
-		free(vec);
+		return (free(vec[fd]), vec[fd] = NULL, NULL);
+	vec[fd] = read_till_nl(fd, buffer, vec[fd]);
+	if (!vec[fd])
+		free(vec[fd]);
 	free(buffer);
-	if (!vec)
+	if (!vec[fd])
 		return ( NULL);
-	line = line_pull(vec);
+	line = line_pull(vec[fd]);
 	if (!line)
-		return (free(vec), vec = NULL, NULL);
-	vec = line_push(vec);
+		return (free(vec[fd]), vec[fd] = NULL, NULL);
+	vec[fd] = line_push(vec[fd]);
 	return (line);
 }
