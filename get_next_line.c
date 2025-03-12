@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/_types/_size_t.h>
 
 int	has_nl(char *s)
 {
